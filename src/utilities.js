@@ -1,3 +1,4 @@
+
 //  Triangulation sets of three
 export const TRIANGULATION = [
   127,
@@ -2642,6 +2643,18 @@ export const TRIANGULATION = [
   255,
 ];
 
+export var leftCheek = {
+  leftCheek_x : 0,
+  leftCheek_y : 0
+};
+
+export var rightCheek = {
+  rightCheek_x : 0,
+  rightCheek_y : 0
+};
+
+export var boundingFace;
+
 // Triangle drawing method
 const drawPath = (ctx, points, closePath) => {
   const region = new Path2D();
@@ -2662,6 +2675,13 @@ const drawPath = (ctx, points, closePath) => {
 export const drawMesh = (predictions, ctx) => {
   if (predictions.length > 0) {
     predictions.forEach((prediction) => {
+      leftCheek.leftCheek_x = prediction.annotations.leftCheek[0][0];
+      leftCheek.leftCheek_y = prediction.annotations.leftCheek[0][1];
+      rightCheek.rightCheek_x = prediction.annotations.rightCheek[0][0];
+      rightCheek.rightCheek_y = prediction.annotations.rightCheek[0][1];
+
+      boundingFace = prediction.annotations.silhouette;
+      
       const keypoints = prediction.scaledMesh;
 
       //  Draw Triangles
@@ -2689,3 +2709,5 @@ export const drawMesh = (predictions, ctx) => {
     });
   }
 };
+
+

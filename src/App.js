@@ -9,7 +9,7 @@
 
 // Face Mesh - https://github.com/tensorflow/tfjs-models/tree/master/facemesh
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./App.css";
 import * as tf from "@tensorflow/tfjs";
 // OLD MODEL
@@ -19,10 +19,31 @@ import * as tf from "@tensorflow/tfjs";
 import * as facemesh from "@tensorflow-models/face-landmarks-detection";
 import Webcam from "react-webcam";
 import { drawMesh } from "./utilities";
+import { leftCheek } from "./utilities";
 
 function App() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const [image, setImage] = useState('');
+  var capture;
+
+  /*
+  const snap = React.useCallback(() => {
+    
+    console.log("reached snap");
+    setTimeout(() => {
+      if (typeof webcamRef.current !== "undefined" &&
+      webcamRef.current !== null &&
+      webcamRef.current.video.readyState === 4){
+        capture = webcamRef.current.getScreenshot();
+      }
+      
+    }, 10);
+    console.log("made it past timeout");
+    setImage(capture)
+    
+  }, [webcamRef]);
+  */
 
   //  Load posenet
   const runFacemesh = async () => {
@@ -70,7 +91,12 @@ function App() {
     }
   };
 
-  useEffect(()=>{runFacemesh()}, []);
+  useEffect(()=>{
+    
+    runFacemesh();
+    //snap();
+    
+  }, []);
 
   return (
     <div className="App">
@@ -104,6 +130,11 @@ function App() {
             height: 480,
           }}
         />
+        <div>
+          {image=== ''? <Webcam ref= {webcamRef} />:<img src = {image}/>}
+        </div>
+
+        
       </header>
     </div>
   );
